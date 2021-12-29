@@ -1,0 +1,231 @@
+<?php
+include 'connect.php';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Link CSS sendiri -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Link Icon -->
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+    <title>Barang</title>
+</head>
+<body>
+
+    <div class="sidebar">
+
+        <!-- Brand -->
+        <div class="sidebar-brand">
+            <h2>
+                <div class="brand">
+                    <i class="lab la-wolf-pack-battalion"></i>
+                    <div class="brand-name">Nugas</div>
+                </div>
+                <i class="las la-bars" id="btn"></i>
+            </h2>
+        </div>
+
+        <!-- Menu -->
+
+        <ul class="nav_list">
+            <li>
+                <a href="home.php" class="menu">
+                    <i class="las la-home"></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li class="dua">
+                <a id="btn1" class="menu">
+                    <i class="las la-users"></i>
+                    <span class="links_name">Master</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="pegawai.php">
+                            <i class="las la-users"></i>
+                            Pegawai
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pengguna.php">
+                            <i class="las la-user"></i>
+                            Pengguna
+                        </a>
+                    </li>
+                    <li>
+                        <a href="barang.php">
+                            <i class="las la-laptop"></i>
+                            Barang
+                        </a>
+                    </li>
+                </ul>
+                <span class="tooltip">Master</span>
+            </li>
+            <li class="tiga">
+                <a href="inventori.php" class="menu">
+                    <i class="las la-box"></i>
+                    <span class="links_name">Inventori</span>
+                </a>
+                <span class="tooltip">Inventori</span>
+            </li>
+            <li class="empat">
+                <a href="peminjaman.php"  class="menu">
+                    <i class="las la-receipt"></i>
+                    <span class="links_name">Peminjaman</span>
+                </a>
+                <span class="tooltip">Peminjaman</span>
+            </li>
+            <li class="bawah">
+                <a class="menu" id="btn2">
+                    <i class="at">@</i>
+                    <span class="links_name">Happy^2</span>
+                </a>
+                <span class="tooltip">Copyright</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+
+        <header>
+            <div class="header-title">
+                <h2>
+                    <label for="">
+                        Bukan Master
+                    </label>
+                </h2>
+            </div>
+            <div class="user-wrapper">
+                <img src="gambar/poto.png" alt="">
+                <div>
+                    <h4>Admin</h4>
+                    <small>Super admin</small>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Tabel Barang -->
+            <div class="table-grid">
+
+                <div class="pinjams">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Tabel Barang</h3>
+
+                            <button id="tambah">Tambah</button>
+                            <a href="inventori.php" class="button-main">Inventori <span class="las la-arrow-right"></span></a>
+                        </div>
+
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td>Id barang</td>
+                                        <td>Nama Barang</td>
+                                        <td>Stok</td>
+                                        <td>Tersedia</td>
+                                        <td>Aksi</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        $sql    = "SELECT * FROM barang";
+                                        $query  = mysqli_query($connect,$sql);
+                                        while($brg = mysqli_fetch_array($query)){
+                                            echo "<tr>";
+                                            echo "<td class='td-start'>".$brg['id_barang']."</td>";
+                                            echo "<td>".$brg['nama_barang']."</td>";
+                                            echo "<td>".$brg['stok']."</td>";
+                                            echo "<td>".$brg['tersedia']."</td>";
+                                            echo "<td class='td-end'>";
+                                            echo "<a href='formbarang.php?id_barang=".$brg['id_barang']."' type='button' class='button button-secondary'>Ubah</a> | ";
+                                            echo "<a href='hapus.php?id_barang=".$brg['id_barang']."' type='button' class='button button-danger'>Hapus</a>";
+                                            echo "</td>";
+                                            echo "</tr>";
+                                        }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="penggunas">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Inventori Lite</h3>   
+                            <a href="inventori.php" class="button-main">Lihat <span class="las la-arrow-right"></span></a>
+                        </div>
+                        <div class="card-body scrollpengguna">
+                            <?php
+                            $sql    = "SELECT nama_barang, jumlah_barang, kondisi FROM barang, inventori WHERE barang.id_barang=inventori.id_barang";
+                            $query  = mysqli_query($connect,$sql);
+
+                            while($dp = mysqli_fetch_array($query)){
+                                echo "<div class='pengguna'>";
+                                echo "<div class='info'>";
+                                echo "<div>";
+                                echo "<h4>".$dp['nama_barang']."</h4>";
+                                echo "<small>".$dp['kondisi']."</small>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "<div class='icon'>".$dp['jumlah_barang']."</div>";
+                                echo "</div>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="modalcontainer" class="modalcontainer">
+        <div class="modal">
+            <form action="simpan.php" method="POST">
+                <div class="form_group">
+                    <input class="form_field" type="text" name="id_barang">
+                    <label class="form_label">Id Barang</label>
+                </div>
+                <div class="form_group">
+                    <input class="form_field" type="text" name="nama_barang">
+                    <label class="form_label">Nama Barang</label>
+                </div>
+                <div class="form_group">
+                    <input class="form_field" type="text" name="jenis_barang">
+                    <label class="form_label">Jenis Barang</label>
+                </div>
+                <div class="form_group">
+                    <input class="form_field" type="number" name="jumlah_barang">
+                    <label class="form_label">Jumlah Barang</label>
+                </div>
+                <div class="form_group">
+                    <select class="form_field" name="kondisi" id="kondisi">
+                        <option value="BAIK">
+                            BAIK
+                        </option>
+                        <option value="RUSAK">
+                            RUSAK
+                        </option>
+                        <option value="DIPERBAIKI">
+                            DIPERBAIKI
+                        </option>
+                    </select>
+                    <label class="form_label">Kondisi</label>
+                </div>
+                <input class="submit" type="submit" name="simpan_barang" value="Tambah">
+            </form>
+        </div>
+    </div>
+    <script src="nyam.js"></script>
+</body>
+</html>
